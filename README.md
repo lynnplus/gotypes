@@ -1,2 +1,3 @@
 # gotypes
-对golang的一些基本类型提供泛型包装，并扩展一些常用类型和类型工具
+
+Provide generic wrappers for some basic types of golang, and extend some common types and type tools
