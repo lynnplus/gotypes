@@ -31,7 +31,7 @@ type EnumerableWithKey[K comparable, V any] interface {
 }
 
 func ConvertTo[V any, R any](source Enumerable[V], convert func(V) R) []R {
-	r := make([]R, 0, 10)
+	r := make([]R, 0, source.Size())
 	source.EachValue(func(value V) {
 		r = append(r, convert(value))
 	})
@@ -39,7 +39,7 @@ func ConvertTo[V any, R any](source Enumerable[V], convert func(V) R) []R {
 }
 
 func ConvertToWithKey[K comparable, V any, R any](source EnumerableWithKey[K, V], convert func(K, V) R) []R {
-	r := make([]R, 0, 10)
+	r := make([]R, 0, source.Size())
 	source.Each(func(key K, value V) {
 		r = append(r, convert(key, value))
 	})
@@ -47,7 +47,7 @@ func ConvertToWithKey[K comparable, V any, R any](source EnumerableWithKey[K, V]
 }
 
 func ConvertToWithIndex[V any, R any](source Enumerable[V], convert func(int, V) R) []R {
-	r := make([]R, 0, 10)
+	r := make([]R, 0, source.Size())
 	index := 0
 	source.EachValue(func(value V) {
 		r = append(r, convert(index, value))
