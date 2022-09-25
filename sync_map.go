@@ -51,13 +51,18 @@ func (s *SyncMap[K, V]) Exist(key K) (ok bool) {
 }
 
 func (s *SyncMap[K, V]) Store(key K, value V) {
-	s.verifyNil(value)
+	if s.verifyNil(value) {
+		return
+	}
 	s.instance.Store(key, value)
 	s.unknownStoreCount.Add(1)
 }
 
 func (s *SyncMap[K, V]) Load(key K) (value V, ok bool) {
 	v, ok := s.instance.Load(key)
+	if !ok {
+		return value, false
+	}
 	data := v.(V)
 	return data, ok
 }
@@ -144,7 +149,9 @@ func (s *SyncMap[K, V]) Data() map[K]V {
 }
 
 func (s *SyncMap[K, V]) LoadOrStore(key K, value V) (actual V, loaded bool) {
-	s.verifyNil(value)
+	if s.verifyNil(value) {
+		return actual, false
+	}
 	data, load := s.instance.LoadOrStore(key, value)
 	if !load {
 		s.cacheSize.Add(1)
@@ -173,9 +180,7 @@ func (s *SyncMap[K, V]) syncSize() int {
 	return count
 }
 
-func (s *SyncMap[K, V]) verifyNil(v V) {
+func (s *SyncMap[K, V]) verifyNil(v V) bool {
 	ptr := interface{}(v)
-	if ptr == nil {
-		panic("not support nil values")
-	}
+	return ptr == nil
 }
