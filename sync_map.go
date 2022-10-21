@@ -165,6 +165,9 @@ func (s *SyncMap[K, V]) LoadAndDelete(key K) (value V, loaded bool) {
 	if exist {
 		s.cacheSize.Add(-1)
 	}
+	if !exist {
+		return nil, false
+	}
 	value = data.(V)
 	return value, exist
 }
