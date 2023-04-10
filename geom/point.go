@@ -14,36 +14,29 @@
  * limitations under the License.
  */
 
-package constraints
+package geom
 
-type Signed interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64
+import (
+	"fmt"
+	. "github.com/lynnplus/gotypes/constraints"
+)
+
+type Point[T Number] struct {
+	X, Y T
 }
 
-type Unsigned interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
+func (p Point[T]) String() string {
+	return fmt.Sprintf("(%v,%v)", p.X, p.Y)
 }
 
-type Integer interface {
-	Signed | Unsigned
+func (p Point[T]) Add(q Point[T]) Point[T] {
+	return Point[T]{p.X + q.X, p.Y + q.Y}
 }
 
-type Float interface {
-	~float32 | ~float64
+func (p Point[T]) ToSize() Size[T] {
+	return Size[T]{p.X, p.Y}
 }
 
-type Complex interface {
-	~complex64 | ~complex128
-}
-
-type Ordered interface {
-	Integer | Float | ~string
-}
-
-type Number interface {
-	Integer | Float
-}
-
-type Basic interface {
-	Number | string
+func Pt[T Number](x, y T) Point[T] {
+	return Point[T]{x, y}
 }

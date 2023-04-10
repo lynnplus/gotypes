@@ -14,36 +14,14 @@
  * limitations under the License.
  */
 
-package constraints
+package geom
 
-type Signed interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64
+import . "github.com/lynnplus/gotypes/constraints"
+
+type LineSegment[T Number] struct {
+	Min, Max Point[T]
 }
 
-type Unsigned interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
-}
-
-type Integer interface {
-	Signed | Unsigned
-}
-
-type Float interface {
-	~float32 | ~float64
-}
-
-type Complex interface {
-	~complex64 | ~complex128
-}
-
-type Ordered interface {
-	Integer | Float | ~string
-}
-
-type Number interface {
-	Integer | Float
-}
-
-type Basic interface {
-	Number | string
+func LineSeg[T Number](x0, y0, x1, y1 T) LineSegment[T] {
+	return LineSegment[T]{Point[T]{x0, y0}, Point[T]{x1, y1}}
 }
