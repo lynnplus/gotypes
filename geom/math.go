@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 Lynn <lynnplus90@gmail.com>
+ * Copyright (c) 2023 Lynn <lynnplus90@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,17 @@
 
 package geom
 
-//type LineSegment[T Number] struct {
-//	Min, Max Point[T]
-//}
+import (
+	. "github.com/lynnplus/gotypes/constraints"
+	"math"
+)
+
+// Abs returns the absolute value of x.
 //
-//func LineSeg[T Number](x0, y0, x1, y1 T) LineSegment[T] {
-//	return LineSegment[T]{Point[T]{x0, y0}, Point[T]{x1, y1}}
-//}
+// Special cases are:
+//
+//	Abs(±Inf) = +Inf
+//	Abs(NaN) = NaN
+func Abs[T Number](x T) T {
+	return T(math.Abs(float64(x)))
+}

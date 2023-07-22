@@ -19,24 +19,90 @@ package geom
 import (
 	"fmt"
 	. "github.com/lynnplus/gotypes/constraints"
+	"math"
 )
 
-type Point[T Number] struct {
+type Vector[T Number] struct {
 	X, Y T
 }
 
-func (p Point[T]) String() string {
-	return fmt.Sprintf("(%v,%v)", p.X, p.Y)
+type Point[T Number] struct {
+	Vector[T]
 }
 
-func (p Point[T]) Add(q Point[T]) Point[T] {
-	return Point[T]{p.X + q.X, p.Y + q.Y}
+func (p *Point[T]) Value() Vector[T] {
+	return p.Vector
 }
 
-func (p Point[T]) ToSize() Size[T] {
-	return Size[T]{p.X, p.Y}
+func (v Vector[T]) String() string {
+	return fmt.Sprintf("(%.12f, %.12f)", v.X, v.Y)
+}
+
+func (v Vector[T]) Add(ov Vector[T]) Vector[T] {
+	return Vector[T]{v.X + ov.X, v.Y + ov.Y}
+}
+
+// Dot returns the dot product between v and ov.
+func (v Vector[T]) Dot(ov Vector[T]) T {
+	return v.X*ov.X + v.Y*ov.Y
+}
+
+// Sub returns the difference of p and ov.
+func (v Vector[T]) Sub(ov Vector[T]) Vector[T] {
+	return Vector[T]{v.X - ov.X, v.Y - ov.Y}
+}
+
+// Mul returns the scalar product of v and m.
+func (v Vector[T]) Mul(m float64) Vector[float64] {
+	return Vector[float64]{m * float64(v.X), m * float64(v.Y)}
+}
+
+// Norm returns the vector's norm.
+func (v Vector[T]) Norm() float64 {
+	//hypotenuse
+	return math.Hypot(float64(v.X), float64(v.Y))
+}
+
+// Cross returns the cross product of v and ov.
+func (v Vector[T]) Cross(ov Vector[T]) T {
+	return v.X*ov.Y - v.Y*ov.X
+}
+
+// Point return Point struct data
+func (v Vector[T]) Point() Point[T] {
+	return Point[T]{v}
+}
+
+//type Point[T Number] struct {
+//	Vector[T]
+//}
+//
+//func (p Point[T]) Add(ov Point[T]) Point[T] {
+//	math.Hypot()
+//
+//	return Point[T]{p.Vector.Add(ov)}
+//}
+
+// Norm returns the vector's norm.
+//func (p Point[T]) Norm() float64 {
+//	return math.Hypot(p.X, p.Y)
+//}
+
+// Dot returns the dot product between p and op.
+//
+// zh:返回 p 和 op 之间的几何点积
+//
+//	func (p Point[T]) Dot(op Point[T]) float64 {
+//		return p.X*op.X + p.Y*op.Y
+//	}
+//
+//	func (p Point[T]) ToSize() Size[T] {
+//		return Size[T]{p.X, p.Y}
+//	}
+func Vec[T Number](x, y T) Vector[T] {
+	return Vector[T]{x, y}
 }
 
 func Pt[T Number](x, y T) Point[T] {
-	return Point[T]{x, y}
+	return Point[T]{Vec(x, y)}
 }

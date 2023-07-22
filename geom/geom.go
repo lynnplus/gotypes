@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-// Package geom implements a basic 2-D geometry library.
+// Package geom implements a basic geometry library.
 package geom

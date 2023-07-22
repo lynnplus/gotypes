@@ -22,6 +22,15 @@ type Size[T Number] struct {
 	Width, Height T
 }
 
+func (si Size[T]) Div(v T) Size[T] {
+	return Size[T]{si.Width / v, si.Height / v}
+}
+
+// Point return Point struct data
+func (si Size[T]) Point() Point[T] {
+	return Pt(si.Width, si.Height)
+}
+
 type Rectangle[T Number] struct {
 	Min, Max Point[T]
 }
@@ -31,10 +40,13 @@ func (rt Rectangle[T]) String() string {
 }
 
 func (rt Rectangle[T]) Size() Size[T] {
-	return Size[T]{
-		rt.Max.X - rt.Min.X,
-		rt.Max.Y - rt.Min.Y,
-	}
+	wh := rt.Max.Sub(rt.Min.Vector)
+	return Size[T]{wh.X, wh.Y}
+}
+
+func (rt Rectangle[T]) Center() Point[T] {
+	wh := rt.Size().Div(T(2)).Point()
+	return rt.Min.Add(wh.Value()).Point()
 }
 
 func Rect[T Number](x0, y0, x1, y1 T) Rectangle[T] {
@@ -44,7 +56,7 @@ func Rect[T Number](x0, y0, x1, y1 T) Rectangle[T] {
 	if y0 > y1 {
 		y0, y1 = y1, y0
 	}
-	return Rectangle[T]{Point[T]{x0, y0}, Point[T]{x1, y1}}
+	return Rectangle[T]{Pt(x0, y0), Pt(x1, y1)}
 }
 
 type RotatedRect[T Number] struct {
