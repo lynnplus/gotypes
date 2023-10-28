@@ -51,25 +51,20 @@ func (s *SyncMap[K, V]) Exist(key K) (ok bool) {
 }
 
 func (s *SyncMap[K, V]) Store(key K, value V) {
-	if s.verifyNil(value) {
-		return
-	}
 	s.instance.Store(key, value)
 	s.unknownStoreCount.Add(1)
 }
 
 func (s *SyncMap[K, V]) Load(key K) (value V, ok bool) {
 	v, ok := s.instance.Load(key)
-	if !ok {
-		return value, false
-	}
-	data := v.(V)
-	return data, ok
+	vv, _ := v.(V)
+	return vv, ok
 }
 
 func (s *SyncMap[K, V]) Range(f func(key K, value V) bool) {
 	s.instance.Range(func(k any, v any) bool {
-		return f(k.(K), v.(V))
+		vv, _ := v.(V)
+		return f(k.(K), vv)
 	})
 }
 
@@ -149,15 +144,12 @@ func (s *SyncMap[K, V]) Data() map[K]V {
 }
 
 func (s *SyncMap[K, V]) LoadOrStore(key K, value V) (actual V, loaded bool) {
-	if s.verifyNil(value) {
-		return actual, false
-	}
 	data, load := s.instance.LoadOrStore(key, value)
 	if !load {
 		s.cacheSize.Add(1)
 	}
-	actual = data.(V)
-	return actual, load
+	vv, _ := data.(V)
+	return vv, load
 }
 
 func (s *SyncMap[K, V]) LoadAndDelete(key K) (value V, loaded bool) {
@@ -165,11 +157,8 @@ func (s *SyncMap[K, V]) LoadAndDelete(key K) (value V, loaded bool) {
 	if exist {
 		s.cacheSize.Add(-1)
 	}
-	if !exist {
-		return value, false
-	}
-	value = data.(V)
-	return value, exist
+	vv, _ := data.(V)
+	return vv, exist
 }
 
 func (s *SyncMap[K, V]) syncSize() int {
@@ -181,9 +170,4 @@ func (s *SyncMap[K, V]) syncSize() int {
 	s.unknownStoreCount.Store(0)
 	s.cacheSize.Store(int64(count))
 	return count
-}
-
-func (s *SyncMap[K, V]) verifyNil(v V) bool {
-	ptr := interface{}(v)
-	return ptr == nil
 }
