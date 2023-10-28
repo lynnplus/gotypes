@@ -101,10 +101,12 @@ func (v Vector3[T]) Normalize() Vector3[float64] {
 	return v.Mul(1 / math.Sqrt(float64(n2)))
 }
 
+// Vec3 return a Vector3
 func Vec3[T Number](x, y, z T) Vector3[T] {
 	return Vector3[T]{x, y, z}
 }
 
+// Pt3 return a Point3 from x,y,z
 func Pt3[T Number](x, y, z T) Point3[T] {
 	return Point3[T]{Vec3(x, y, z)}
 }

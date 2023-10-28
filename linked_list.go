@@ -32,6 +32,7 @@ type LinkedList[T comparable] struct {
 	size  int
 }
 
+// NewLinkedList return an LinkedList
 func NewLinkedList[T comparable](values ...T) *LinkedList[T] {
 	list := &LinkedList[T]{}
 	list.Add(values...)
