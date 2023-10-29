@@ -38,7 +38,7 @@ func (v Vector[T]) String() string {
 	return fmt.Sprintf("(%.12f, %.12f)", v.X, v.Y)
 }
 
-func (v Vector[T]) Add(ov Vector[T]) Vector[T] {
+func (v Vector[T]) Plus(ov Vector[T]) Vector[T] {
 	return Vector[T]{v.X + ov.X, v.Y + ov.Y}
 }
 
@@ -51,6 +51,10 @@ func (v Vector[T]) Dot(ov Vector[T]) T {
 func (v Vector[T]) Sub(ov Vector[T]) Vector[T] {
 	return Vector[T]{v.X - ov.X, v.Y - ov.Y}
 }
+
+//func (v Vector[T]) Div(ov Vector[T]) Vector[T] {
+//	return
+//}
 
 // Mul returns the scalar product of v and m.
 func (v Vector[T]) Mul(m float64) Vector[float64] {
@@ -68,37 +72,15 @@ func (v Vector[T]) Cross(ov Vector[T]) T {
 	return v.X*ov.Y - v.Y*ov.X
 }
 
+//func (v Vector[T]) Rotate(rad float64) Vector[T]{
+//	return Vec[T](v.X*math.Cos(rad)-v.Y*math.Sin(rad),v.X*math.Sin(rad)+v.Y*math.Cos(rad))
+//}
+
 // Point return Point struct data
 func (v Vector[T]) Point() Point[T] {
 	return Point[T]{v}
 }
 
-//type Point[T Number] struct {
-//	Vector[T]
-//}
-//
-//func (p Point[T]) Add(ov Point[T]) Point[T] {
-//	math.Hypot()
-//
-//	return Point[T]{p.Vector.Add(ov)}
-//}
-
-// Norm returns the vector's norm.
-//func (p Point[T]) Norm() float64 {
-//	return math.Hypot(p.X, p.Y)
-//}
-
-// Dot returns the dot product between p and op.
-//
-// zh:返回 p 和 op 之间的几何点积
-//
-//	func (p Point[T]) Dot(op Point[T]) float64 {
-//		return p.X*op.X + p.Y*op.Y
-//	}
-//
-//	func (p Point[T]) ToSize() Size[T] {
-//		return Size[T]{p.X, p.Y}
-//	}
 func Vec[T Number](x, y T) Vector[T] {
 	return Vector[T]{x, y}
 }

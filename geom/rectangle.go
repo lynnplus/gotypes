@@ -22,6 +22,7 @@ type Size[T Number] struct {
 	Width, Height T
 }
 
+// Div Divide
 func (si Size[T]) Div(v T) Size[T] {
 	return Size[T]{si.Width / v, si.Height / v}
 }
@@ -46,7 +47,15 @@ func (rt Rectangle[T]) Size() Size[T] {
 
 func (rt Rectangle[T]) Center() Point[T] {
 	wh := rt.Size().Div(T(2)).Point()
-	return rt.Min.Add(wh.Value()).Point()
+	return rt.Min.Plus(wh.Value()).Point()
+}
+
+// Plus Translate
+func (rt Rectangle[T]) Plus(offset Vector[T]) Rectangle[T] {
+	return Rectangle[T]{
+		Min: rt.Min.Plus(offset).Point(),
+		Max: rt.Max.Plus(offset).Point(),
+	}
 }
 
 func Rect[T Number](x0, y0, x1, y1 T) Rectangle[T] {

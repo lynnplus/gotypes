@@ -16,20 +16,38 @@
 
 package gsync
 
-type Pool[T any] interface {
-	Put(x T)
-	Get() T
+import (
+	"sync"
+)
+
+type Pool[T Resetter] struct {
+	pool sync.Pool
 }
 
-//
-//type Pool[T any] struct {
-//	pool sync.Pool
-//}
-//
-//func (p *Pool[T]) Put(x T)  {
-//	p.pool.Put(x)
-//}
-//
-//func(p *Pool[T]) Get() T{
-//	return p.pool.Get()
-//}
+func NewPool[T Resetter](newFunc func() T) *Pool[T] {
+	return &Pool[T]{
+		pool: sync.Pool{New: func() any {
+			if newFunc == nil {
+				return nil
+			}
+			return newFunc()
+		}},
+	}
+}
+
+func (p *Pool[T]) Put(x T) {
+	if any(x) == nil {
+		return
+	}
+	x.Reset()
+	p.pool.Put(x)
+}
+
+func (p *Pool[T]) Get() T {
+	v, _ := p.pool.Get().(T)
+	return v
+}
+
+type Resetter interface {
+	Reset()
+}

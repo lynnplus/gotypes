@@ -38,8 +38,8 @@ func (p Point3[T]) Value() Vector3[T] {
 	return p.Vector3
 }
 
-// Add returns the standard vector sum of v and ov.
-func (v Vector3[T]) Add(ov Vector3[T]) Vector3[T] {
+// Plus returns the standard vector sum of v and ov.
+func (v Vector3[T]) Plus(ov Vector3[T]) Vector3[T] {
 	return Vector3[T]{v.X + ov.X, v.Y + ov.Y, v.Z + ov.Z}
 }
 
